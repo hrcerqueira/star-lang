@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+mkdir examples
+rm examples/*
+
+sbt run
+
+for file in src/test/resources/samples/*
+do
+./target/scala-3.7.2/starlang convert $file > examples/$(basename $file)
+done

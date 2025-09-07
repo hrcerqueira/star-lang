@@ -1,0 +1,51 @@
+$
+U+
+h+
+U+
+w+
+!
+
+
+U                # uppercase letters
+tcc+             # add 50 to the counter, next leg
+ccm[cc+]+        # adds 10 more, switches counter mode and copies teh counter value to itself, next leg
+.+m!             # value should be 72 now, prints H, resets counter mode, end star
+cccm+            # W invocation, adds 15 to the counter, switches mode, next leg
+[cc+]--.m!       # add teh counter value, takes two so teh value becomes 87, prints, resets mode, done
+
+
+h                       # lowercase parts of Hello
+ttm[cc+]+.              # sets the counter to 100, copies it, adds 1 so its 101, prints
++++++++..-              # adds 7, prints two l, takes one so it moves to southeast leg
+++++.---                # adds 4, prints an r, takes 3
+mtccccc+                # switches mode, sets counter to 75
+[w-.!]m[cc-]--.++m!     # if w if not zero, its the second invocation to print the !, value was 34,take 1, print, done
+                        # if w is still zero, we're printing the space, subtract the counter, takes two more, prints
+                        # and sets the value to 34 so the same leg is invoked again next time
+
+
+w                 # lowercase parts of World
+ttcc+m            # sets the counter to 110, next leg, switch mode
+[cc+].+++.--      # copies the counter prints o (111), adds 3, prints r (114), takes 2 to move to the next leg
+----              # takes 4 more
+.----             # prints 1 (108) and takes 4 more
+----.h!           # another 4 and prints d (100), invokes h to print !
+
+t                 # adds 50 to the counter and then resets itself back to zero
+c+
+c+
+c+
+c+
+c{[-]!]+
+
+m                 # counter mode, increment or decrement
++!
+-!
+
+c                 # counter, if m is 1, always decrements 1, if zero adds 5
+[m-!]+
+[m-!]+
+[m-!]+
+[m-!]+
+[m-!]+!
+
