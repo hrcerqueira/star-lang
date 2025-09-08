@@ -4,7 +4,7 @@ import team.starfish.lang.StarMetaInstructions.{PADDING, STAR}
 
 import scala.util.boundary, boundary.break
 
-class StarWriter(private val dialect: StarDialect, private val identifierMap: Map[String, String]):
+class StarWriter(private val dialect: StarDialect):
 
   private lazy val tokensToSymbol = dialect.tokenMap.toList.map(t => (t._2, t._1)).toMap
 
@@ -30,7 +30,7 @@ class StarWriter(private val dialect: StarDialect, private val identifierMap: Ma
     val maxX = allSet.map(_.maxX).max + shiftX
     val maxY = allSet.map(_.maxY).max + shiftY
 
-    val buffer = List.fill(maxY)(Array.fill(maxX)(" "))
+    val buffer = List.fill(maxY)(Array.fill(maxX)(dialect.whiteSpace))
 
     allSetNormalized.foreach(writeStar(buffer, _))
 
@@ -96,38 +96,41 @@ class StarWriter(private val dialect: StarDialect, private val identifierMap: Ma
   private def generateStarPoints(tokens: StarTokens) =
     val coordinates = tokens.coordinates.nn
 
-    (coordinates.x, coordinates.y, STAR.symbol) ::
-      (coordinates.x, coordinates.y + 1, StarIdentifier(tokens.identifier).symbol) :: (
+    (coordinates.x, coordinates.y, STAR.translatedSymbol) ::
+      (coordinates.x, coordinates.y + 1, StarIdentifier(tokens.identifier).translatedSymbol) :: (
       tokens.north.mapWithOneBasedIndex(tokens.legSize / 2): (token, i) =>
-        (coordinates.x, coordinates.y - i, token.symbol)) ++ (
+        (coordinates.x, coordinates.y - i, token.translatedSymbol)) ++ (
       tokens.east.mapWithOneBasedIndex(tokens.legSize): (token, i) =>
-        (coordinates.x + i, coordinates.y, token.symbol)
+        (coordinates.x + i, coordinates.y, token.translatedSymbol)
       ) ++ (
       tokens.southEast.mapWithOneBasedIndex(tokens.legSize / 2): (token, i) =>
-        (coordinates.x + i, coordinates.y + 1 + i, token.symbol)
+        (coordinates.x + i, coordinates.y + 1 + i, token.translatedSymbol)
       ) ++ (
       tokens.southWest.mapWithOneBasedIndex(tokens.legSize / 2): (token, i) =>
-        (coordinates.x - i, coordinates.y + 1 + i, token.symbol)
+        (coordinates.x - i, coordinates.y + 1 + i, token.translatedSymbol)
       ) ++ (
       tokens.west.mapWithOneBasedIndex(tokens.legSize): (token, i) =>
-        (coordinates.x - i, coordinates.y, token.symbol)
+        (coordinates.x - i, coordinates.y, token.translatedSymbol)
       )
 
   private def clash(a: TokensAndBounds, b: TokensAndBounds) =
-    val pointsA = pointsWithShadow(a, 2)
-    val pointsB = pointsWithShadow(b, 2)
+    val pointsA = pointsWithShadow(a)
+    val pointsB = pointsWithShadow(b)
 
     pointsA.intersect(pointsB).nonEmpty
 
 
-  private def pointsWithShadow(tnb: TokensAndBounds, size: Int = 1) =
+  private def pointsWithShadow(tnb: TokensAndBounds) =
     val basePoints = generateStarPoints(tnb.tokens).map:
       case (x, y, symbol) => (x, y)
 
-    (basePoints :: (
-      addShadow(basePoints, size, (x, y, i) => (x, y + 1 + i)).toList ++
-        addShadow(basePoints, size, (x, y, i) => (x + 1 + i, y)).toList
-      )).flatten.toSet
+    basePoints.flatMap:
+      case (x, y) => List(
+        (x - 1, y - 1), (x, y - 1), (x + 1, y - 1),
+        (x - 1, y), (x, y), (x + 1, y),
+        (x - 1, y + 1), (x, y + 1), (x + 1, y + 1),
+      )
+
 
 
   private def addShadow(points: List[(Int, Int)], size: Int, trf: (Int, Int, Int) => (Int, Int)) =
@@ -136,8 +139,8 @@ class StarWriter(private val dialect: StarDialect, private val identifierMap: Ma
         case (x, y) => trf(x, y, i)
 
   extension (token: StarToken)
-    def symbol = token match
-      case StarIdentifier(symbol) => identifierMap.getOrElse(symbol, symbol)
+    private def translatedSymbol = token match
+      case StarIdentifier(symbol) => dialect.identifierMap.getOrElse(symbol, symbol)
       case _ => tokensToSymbol(token)
 
   extension (leg: List[StarToken])

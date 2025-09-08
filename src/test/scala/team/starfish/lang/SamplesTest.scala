@@ -6,20 +6,54 @@ import team.starfish.lang.alt.AltTokenizer
 import scala.io.Source
 
 class SamplesTest extends AnyFunSuite:
-  
+
   test("print a surprise"):
     runAndAssert("surprise", "!")
 
   test("print a"):
     runAndAssert("printa", "a")
-    
+
   test("hello world"):
     runAndAssert("helloworld", "Hello World!")
 
   test("echo"):
     runAndAssert("echo", "abc sdf 56", "abc sdf 56")
-  
+
+  test("test counter"):
+    runAndAssert("counter_test", "oI")
+
+  test("test repeating counter"):
+    runAndAssert("repeating_counter_test", "ABCD")
+
+  test("test comparisons"):
+    runAndAssert("comparisons_test", "AB")
+
+  test("switch case"):
+    runAndAssert("switchcase", "Ss# ç", "sS# ç")
+
   def runAndAssert(seaFile: String, expectedOutput: String, userInput: String = "") =
     val input = Source.fromResource(s"samples/$seaFile.sea").getLines().mkString("\n")
-    val output = parseAndRun(input, AltTokenizer, userInput)
+
+    val sourceReader = (file: String) =>
+      Source.fromResource(s"samples/$file").getLines().mkString("\n")
+
+    val tokenizer = AltTokenizer(sourceReader)
+    val output = parseAndRun(input, tokenizer, userInput, "none")
     assert(output == expectedOutput)
+
+    testStarsWithDialect(BlandDialect, tokenizer, input, expectedOutput, userInput)
+//    testStarsWithDialect(BeautifulDialect, tokenizer, input, expectedOutput, userInput)
+
+
+
+  def testStarsWithDialect(dialect: StarDialect, tokenizer: AltTokenizer, input: String,expectedOutput: String, userInput: String = "") =
+    val tokens = tokenizer.tokenize(input)
+    val converted = StarWriter(dialect).write(tokens)
+
+    println(converted)
+
+    val starTokenizer = MainSyntaxStarTokenizer(dialect, strict = false)
+    val outputFromStars = parseAndRun(converted, starTokenizer, userInput, "none")
+    assert(outputFromStars == expectedOutput)
+
+

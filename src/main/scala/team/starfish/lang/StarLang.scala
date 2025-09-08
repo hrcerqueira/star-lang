@@ -2,12 +2,22 @@ package team.starfish.lang
 
 import team.starfish.lang.alt.AltTokenizer
 
+import java.nio.file.Paths
 import scala.util.Using
 
-def parseAndRun(code: String, usingTokenizer: StarTokenizer, userInput: String = "", debugOutput: Boolean = false) =
+def parseAndRun(code: String, usingTokenizer: StarTokenizer, userInput: String = "", logLevel: String = "none") =
   val tokens = usingTokenizer.tokenize(code)
   val sea = StarParser.parse(tokens)
-  StarRunner.run(sea, usingTokenizer.dialect.mainStar, userInput, debugOutput)
+  StarRunner.run(sea, usingTokenizer.dialect.mainStar, userInput, logLevel)
+
+def makeSourceReaderFromBaseFile(file: String) =
+  val path = Paths.get(file)
+  val parent = path.getParent
+
+  (fileName: String) =>
+    Using(scala.io.Source.fromFile(parent.resolve(fileName).toFile)): source =>
+      source.getLines().mkString("\n")
+    .get
 
 @main def starLang(args: String*) =
   if args.isEmpty then
@@ -33,8 +43,8 @@ def parseAndRun(code: String, usingTokenizer: StarTokenizer, userInput: String =
     else
       options.head
 
-  val dialectName = readOption("d", "bland", "stars")
-  val debugOutput = readOption("t", "false", "true") == "true"
+  val dialectName = readOption("d", "bland", "stars", "beautiful")
+  val logLevel = readOption("l", "none", "debug", "trace")
 
   val file = if args.size < processedArgs then
     println("missing file")
@@ -43,13 +53,14 @@ def parseAndRun(code: String, usingTokenizer: StarTokenizer, userInput: String =
   else
     args(processedArgs)
       .also(_ => processedArgs += 1)
-    
-  val userInput = if args.size >= processedArgs then
+
+  val userInput = if args.size > processedArgs then
     args(processedArgs)
   else ""
 
   val dialect = dialectName match
-    case "stars" => BeautifulDialect
+    case "stars" => OkDialect
+    case "beautiful" => BeautifulDialect
     case _ => BlandDialect
 
   Using(scala.io.Source.fromFile(file)): source =>
@@ -57,14 +68,16 @@ def parseAndRun(code: String, usingTokenizer: StarTokenizer, userInput: String =
 
     command match
       case "run" =>
-        val output = parseAndRun(input.mkString, MainSyntaxStarTokenizer(dialect), userInput, debugOutput)
+        val output = parseAndRun(input.mkString, MainSyntaxStarTokenizer(dialect), userInput, logLevel)
         println(output)
       case "alt" =>
-        val output = parseAndRun(input.mkString, AltTokenizer, userInput, debugOutput)
+        val tokenizer = AltTokenizer(makeSourceReaderFromBaseFile(file))
+        val output = parseAndRun(input.mkString, tokenizer, userInput, logLevel)
         println(output)
       case "convert" =>
-        val tokens = AltTokenizer.tokenize(input)
-        val converted = StarWriter(dialect, Map()).write(tokens)
+        val tokenizer = AltTokenizer(makeSourceReaderFromBaseFile(file))
+        val tokens = tokenizer.tokenize(input)
+        val converted = StarWriter(dialect).write(tokens)
         println(converted)
 
 

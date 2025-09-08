@@ -7,7 +7,9 @@ trait StarTokenizer:
 class MainSyntaxStarTokenizer(val dialect: StarDialect, strict: Boolean = true) extends StarTokenizer:
 
   def tokenize(input: String): List[StarTokens] =
-    val charMap = input.asCoordinateMap
+    val charMap = input
+      .replaceAll(dialect.whiteSpace, " ")
+      .asCoordinateMap
     charMap
       .filter(_._2 == starToken)
       .keys.toList
@@ -31,9 +33,9 @@ class MainSyntaxStarTokenizer(val dialect: StarDialect, strict: Boolean = true) 
         if strict &&
           (startTokens.north.length != startTokens.southWest.length ||
           startTokens.north.length != startTokens.southEast.length ||
-          startTokens.north.length * 2 != startTokens.west.length ||
-          startTokens.north.length * 2 != startTokens.east.length) then
-          throw new RuntimeException(s"Star legs are not balanced in position $coordinates")
+          startTokens.north.length != startTokens.west.length / 2 ||
+          startTokens.north.length != startTokens.east.length / 2) then
+          throw new RuntimeException(s"Star legs are not balanced in position $coordinates, identifier $identifier")
 
         startTokens
 

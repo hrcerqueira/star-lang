@@ -1,0 +1,23 @@
+;#include counter.sea
+;#include counter.sea fg ty mn #%
+
+;#include comparisons.sea a# b%
+
+$
+#%% mn <["A"+$!]B+
+r###%% mn <["A"+$!]B!
+
+A
+[mm]m[##]m+
+ft#####+
+m[##+]--.[-]m!
+
+B
+[mm]m[##]m+
+ft######+
+m[##+]--.[-]m!
+
+r
+[mm]m[##]m+
+[nn]n[%%]n-!
+

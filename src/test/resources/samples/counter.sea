@@ -1,0 +1,24 @@
+f                 ; adds 50 to the counter and then resets itself back to zero
+t+
+t+
+t+
+t+
+t[-]!
+
+t                 ; adds 10 to the counter and then resets itself back to zero
+#+
+#+
+#+
+#+
+#{[-]!]+
+
+; mode, increment or decrement
+;#include flag.sea fm
+
+#                 ; counter, if m is 1, always decrements 1, if zero adds 5
+[m-!]+!
+[m-!]+!
+[m-!]+!
+[m-!]+!
+[m-!]+!
+

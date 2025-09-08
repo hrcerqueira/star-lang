@@ -1,0 +1,8 @@
+;#include repeating_counter.sea
+
+$
+FT@@@@+
+I[@@+].Y[-]++
+I[@@+].Y[-]+++
+I[@@+].Y[-]++++
+I[@@+].!

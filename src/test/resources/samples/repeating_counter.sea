@@ -1,0 +1,45 @@
+;#include flag.sea fI
+;#include flag.sea fO
+
+; 0, 0 -> fill
+; 0, 1 -> reset
+; 1, 0 -> read
+; 1, 1 -> refill
+
+@
+[I [O [bb+] !] -b! ]  [O [-]b !] +!
+[I [O [bb+] !] -b! ]  [O [-]b !] +!e
+[I [O [bb+] !] -b! ]  [O [-]b !] +!
+[I [O [bb+] !] -b! ]  [O [-]b !] +!
+[I [O [bb+] !] -b! ]  [O [-]b !] +!
+
+b
+[I [O - !] +!][O [-] !]!
+[I [O - !] +!][O [-] !]!
+[I [O - !] +!][O [-] !]!
+[I [O - !] +!][O [-] !]!
+[I [O - !] +!][O [-] !]!
+
+
+F                 ; adds 50 to the counter and then resets itself back to zero
+T+
+T+
+T+
+T+
+T[-]!
+
+T                 ; adds 10 to the counter and then resets itself back to zero
+@+
+@+
+@+
+@+
+@{[-]!]+
+
+P
+[II][OO]!                         ; Reset flags
+
+Y                 ; refill
+PIO@IO!
+
+K
+PO@O!             ; reset to zero

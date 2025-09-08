@@ -1,0 +1,12 @@
+
+"                 ; comparison result
++!
+-!
+
+; assumes there is an a and a b, both set to be decremented when invoked
+
+<
+[""]+                   ; reset result
+[a ab [b<!] +<! ] "+    ; while a not zero, decrement a and b, if b is not zero, recursive continuation, else result stays at zzero, done; if a reaches zero, result is 1, done
+[aa][bb]   --      !    ; make sure a and b are completely consumed
+

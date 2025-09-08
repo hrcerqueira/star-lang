@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
 mkdir examples
+mkdir beautiful-examples
 rm examples/*
-
-sbt run
+rm beautiful-examples/*
 
 for file in src/test/resources/samples/*
 do
 ./target/scala-3.7.2/starlang convert $file > examples/$(basename $file)
+./target/scala-3.7.2/starlang convert -d beautiful $file > beautiful-examples/$(basename $file)
 done

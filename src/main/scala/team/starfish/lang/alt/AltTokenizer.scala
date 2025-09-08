@@ -1,30 +1,70 @@
 package team.starfish.lang.alt
 
-import team.starfish.lang.{BlandDialect, StarCoordinates, StarDialect, StarIdentifier, StarToken, StarTokenList, StarTokenizer, StarTokens}
 import team.starfish.lang.StarInstruction.*
+import team.starfish.lang.*
 
 import scala.::
 
-object AltTokenizer extends StarTokenizer:
+class AltTokenizer(sourceReader: String => String = s => "") extends StarTokenizer:
+
+  import AltTokenize.*
 
   val dialect: StarDialect = BlandDialect
 
   def tokenize(input: String): List[StarTokens] =
-    val lines = input.split("\n")
-      .map(removeComments)
-    readStars(lines.toList)
+    tokenizeWithReplacements(input, Map())
 
-  private val starLineRegex = """^(\P{C})( (\d+) (\d+))?\s*$""".r
+  private def tokenizeWithReplacements(input: String, replacements: Map[String, String]): List[StarTokens] =
+    val lines = input.split("\n")
+
+    val included = readIncludedSeas(lines, replacements)
+
+    val cleanedLines = lines
+      .map(removeComments)
+      .map: line =>
+        line.replaceAll(" ", "")
+      .map: line =>
+        replacements.toList.foldLeft(line): (line, replacement) =>
+          line.replaceAll(replacement._1, replacement._2)
+      .toList
+
+    (included ++ readStars(cleanedLines)).distinctBy(_.identifier).toList
+
+
+  private def readIncludedSeas(lines: Array[String], originalReplacements: Map[String, String]) =
+    lines.filter(_.startsWith(s"$commentChar#include "))
+      .map(line => line.substring(line.indexOf(' ')))
+      .map(_.trim.split(' ').map(_.trim))
+      .flatMap: chunks =>
+        val fileToInclude = chunks.head
+
+        val replacements = chunks.drop(1)
+          .map: chunk =>
+            val chars = chunk.utf8Chars
+            if chars.length < 2 then throw new RuntimeException(s"Invalid replacement at include statement: $chunk")
+            val from = chars.head
+            val to = chars(1).let: to =>
+              originalReplacements.getOrElse(to, to)
+
+            (from, to)
+          .toMap
+
+        val content = sourceReader(fileToInclude)
+
+        tokenizeWithReplacements(content, replacements)
+
+
+  private val starStarRegex = """^(\P{C})( (\d+) (\d+))?\s*$""".r
 
   private def removeComments(line: String): String =
-    line.indexOf('#') match
+    line.indexOf(commentChar(0)) match
       case -1 => line.trim
       case index => line.take(index).trim
 
   private def readStars(lines: List[String]): List[StarTokens] = lines match
     case Nil => Nil
     case line :: tail if line.isEmpty => readStars(tail)
-    case starLineRegex(character, _, x, y) :: tail =>
+    case starStarRegex(character, _, x, y) :: tail =>
       val (legs, restOfLines) = readLegs(tail)
       val otherStars = readStars(restOfLines)
       makeStar(character.charAt(0), x, y, legs) :: otherStars
@@ -74,3 +114,6 @@ object AltTokenizer extends StarTokenizer:
       southWest = legAt(3),
       west = legAt(4),
     )
+
+  object AltTokenize:
+    val commentChar = ";"

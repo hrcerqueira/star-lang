@@ -12,7 +12,7 @@ class AltTokenizerTest extends AnyFunSuite:
         |[.]!
         |+++""".stripMargin
       
-    val stars = AltTokenizer.tokenize(input)
+    val stars = AltTokenizer().tokenize(input)
     assert(stars.size == 1)
     assert(stars.head.north.size == 4)
     assert(stars.head.east.size == 3)
@@ -30,5 +30,5 @@ class AltTokenizerTest extends AnyFunSuite:
         |-
         |""".stripMargin
       
-    val stars = AltTokenizer.tokenize(input)
+    val stars = AltTokenizer().tokenize(input)
     assert(stars.size == 2)

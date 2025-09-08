@@ -9,16 +9,16 @@ extension[A] (option: Option[A])
       case Some(a) => block(a) 
       case None =>
     option
-      
-    
+
+
 extension[T] (obj: T)
-  def andThen[R](block: T => R): R =
+  def let[R](block: T => R): R =
     block(obj)
-    
+
   def also(block: T => Unit): T =
     block(obj)
     obj
-    
+
 extension (line: String)
   def utf8Chars: List[String] =
     line.codePoints()

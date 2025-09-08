@@ -1,0 +1,7 @@
+;#include counter.sea
+
+$
+fft#+           ; sets counter to 101
+m[##+]-.[-]++   ; copies counter to self, print, set to zero, next leg
+mftt###+        ; sets counter to 73, self to next leg
+---m[##+].!     ; print self (I) and exit

@@ -4,30 +4,32 @@ import team.starfish.lang.ExecutionContinuation.{CONTINUE, RETURN_FROM_STAR}
 
 import scala.collection.mutable
 
-private class StarRunner(sea: Sea, userInput: String = "", debugOutput: Boolean = false):
+private class StarRunner(sea: Sea, userInput: String = "", logLevel: String = "none"):
 
   private type State = mutable.Map[String, Int]
 
   private val state: State = mutable.Map[String, Int]()
   private val output: mutable.ListBuffer[Char] = mutable.ListBuffer[Char]()
-  
+
   private var unconsumedInput = userInput.utf8Chars
 
   def run(star: StarFish): String =
     star.execute()
     output.mkString
-    
+
   private var depth = 0
 
   extension (star: StarFish)
-    private def execute(): Unit =
-      depth += 1
-      trace("*** Start execution")
+    private def execute(incDepth: Boolean = true): Unit =
+      if incDepth then
+        depth += 1
+        trace("*** Start execution")
       while true do
         findAndExecuteLeg() match
           case RETURN_FROM_STAR =>
-            trace(s"Star execution done")
-            depth -= 1
+            if incDepth then
+              trace(s"Star execution done")
+              depth -= 1
             return
           case CONTINUE =>
             trace(s"<<< Leg execution done")
@@ -35,34 +37,47 @@ private class StarRunner(sea: Sea, userInput: String = "", debugOutput: Boolean 
 
     private def findAndExecuteLeg(): ExecutionContinuation =
       trace(s">>> Next leg, value is $ownValue")
-      val executionLeg = ownValue % 5 match
+      val (legName, executionLeg) = ownValue % 5 match
         case 0 =>
-          trace(s"Executing north leg")
-          star.north
+          "north" -> star.north
         case 1 =>
           trace(s"Executing east leg")
-          star.east
+          "east" -> star.east
         case 2 =>
-          trace(s"Executing southeast leg")
-          star.southEast
+          "southEast" -> star.southEast
         case 3 =>
-          trace(s"Executing southwest leg")
-          star.southWest
+          "southWest" -> star.southWest
         case 4 =>
-          trace(s"Executing west leg")
-          star.west
+          "west" -> star.west
 
       val stateBeforeLeg = state.toMap
-      val continuation = executeNodes(executionLeg)
-      val stateAfterLeg = state.toMap
+      val unconsumedInputBeforeLeg = unconsumedInput.size
 
-      // todo: this protection won;t work with inputss
-//      if continuation == CONTINUE && stateBeforeLeg == stateAfterLeg then
-//        throw RuntimeException(
-//          s"""
-//            |Leg execution done with no state change or return, this is going to be an infinite loop.
-//            |Executing leg ${executionLeg} of star ${star.symbol}.
-//            |State: ${state.toList.map(e => s"${e._1} -> ${e._2}").mkString("\n")}""".stripMargin)
+      def statesTransition(prefix: String, cmp: Map[String, Int]) =
+        val states = (stateBeforeLeg.keys.toSet ++ cmp.keys.toSet).toList.sorted
+        states
+          .map: s =>
+            s"$logSpacing$prefix $s: ${stateBeforeLeg.getOrElse(s, 0)} -> ${cmp.getOrElse(s, 0)}"
+          .mkString("\n")
+
+
+      debug:
+        s"Executing ${star.symbol}.$legName leg:\n${statesTransition(">", stateBeforeLeg)})"
+
+      val continuation = executeNodes(executionLeg)
+
+      val stateAfterLeg = state.toMap
+      val unconsumedInputAfterLeg = unconsumedInput.size
+
+      debug:
+        s"Executed ${star.symbol}.$legName leg:\n${statesTransition("<", stateAfterLeg)})"
+
+      if continuation == CONTINUE && stateBeforeLeg == stateAfterLeg && unconsumedInputBeforeLeg == unconsumedInputAfterLeg then
+        throw RuntimeException(
+          s"""
+            |Leg execution done with no state change or return, this is an infinite loop.
+            |Executing leg ${executionLeg} of star ${star.symbol}.
+            |State: ${state.toList.map(e => s"${e._1} -> ${e._2}").mkString("\n")}""".stripMargin)
 
       continuation
 
@@ -83,12 +98,12 @@ private class StarRunner(sea: Sea, userInput: String = "", debugOutput: Boolean 
         RETURN_FROM_STAR
 
       case Increment =>
-        trace(s"Incrementing value")
+        trace(s"Incrementing value: $ownValue -> ${ownValue + 1}")
         state.update(star.symbol, ownValue + 1)
         CONTINUE
 
       case Decrement =>
-        trace(s"Decrementing value")
+        trace(s"Decrementing value: $ownValue -> ${ownValue - 1}")
         if ownValue == 0 then
           throw new RuntimeException(s"Cannot decrement value below 0")
         state.update(star.symbol, ownValue - 1)
@@ -97,8 +112,12 @@ private class StarRunner(sea: Sea, userInput: String = "", debugOutput: Boolean 
       case Read =>
         trace(s"Reading from stdin")
         unconsumedInput match
-          case Nil => state.update(star.symbol, 0)
+          case Nil =>
+            trace(s"No more input, setting value to 0")
+            state.update(star.symbol, 0)
           case head :: tail =>
+            val read = head.codePoints().toArray.head
+            trace(s"Read $read")
             state.update(star.symbol, head.codePoints().toArray.head)
             unconsumedInput = tail
 
@@ -120,9 +139,9 @@ private class StarRunner(sea: Sea, userInput: String = "", debugOutput: Boolean 
       case control: IfSelfDivisionNotZero =>
         executeControl(control, ownValue >= 0 && ownValue < 5, s"Checking if $ownValue is in range ]0, 5]")
 
-      case JumpToStar(star) =>
-        trace(s"Jumping to $star")
-        sea(star).execute()
+      case JumpToStar(jmpStar) =>
+        trace(s"Jumping to $jmpStar")
+        sea(jmpStar).execute(jmpStar != star.symbol)
         CONTINUE
 
     private def executeControl(node: StarControlNode, check: => Boolean, checkName: String): ExecutionContinuation =
@@ -145,9 +164,19 @@ private class StarRunner(sea: Sea, userInput: String = "", debugOutput: Boolean 
       state.getOrElse(star.symbol, 0)
 
     private def trace(message: => String): Unit =
-      if debugOutput then
-        println(s"${" ".repeat(depth)}[${star.symbol}] $message")
+      if logLevel == "trace" then
+        log(message)
 
+    private def debug(message: => String): Unit =
+      if logLevel == "debug" then
+        log(message)
+      else
+        trace(message)
+
+    private def log(message: => String): Unit =
+      println(s"$logSpacing[${star.symbol}] $message")
+
+    private def logSpacing = " ".repeat(depth)
 
 extension (sea: Sea)
   private def apply(starName: String) = sea.starfishes.find(_.symbol == starName)
@@ -157,8 +186,8 @@ private enum ExecutionContinuation:
   case CONTINUE, RETURN_FROM_STAR
 
 object StarRunner:
-  def run(sea: Sea, mainStar: String, userInput: String = "", debugOutput: Boolean = false): String =
-    val runner = new StarRunner(sea, userInput, debugOutput)
+  def run(sea: Sea, mainStar: String, userInput: String = "", logLevel: String = "none"): String =
+    val runner = new StarRunner(sea, userInput, logLevel)
     runner.run(sea(mainStar))
 
 
