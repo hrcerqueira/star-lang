@@ -1,0 +1,32 @@
+;#include counter.sea
+;#include repeating_counter.sea
+
+;#include comparisons.sea a@ b#
+;#include comparisons.sea <> a# b@
+
+$
+?[$K[mm][-@]u[-]$!]!
+
+u
+     ft####         mI> ["+u!]   l!                 ; if greater that 65 next, else check if is lowercase
+mY   ftt########    mI< ["i-!]   +                  ; if less that 79 add 13, done
+mY   ftttt#         mI< ["o--!]  l--!               ; if less than 91, take 13, done
+
+l
+mY   ftttt######    mI> ["+l!]   +++                ; if greater that 96 next, else skip three and next
+mY   ff#########    mI< ["i-!]   +                  ; if less that 109 add 13, done
+mY   fftt###        mI< ["o--!]  +                  ; if less than 123, take 13, done
+Yj[-]!                                              ; just print it
+
+
+i
+Y T@@@ +
+j[-]!
+
+o
+Ym  t### +
+mI [##@] +
+j[-]!
+
+j
+PI[@@+].[-]!

@@ -9,9 +9,9 @@ $
 
 
 e
-     ft####      mI> ["+e!]   ++                 ; if greater that 65 next, else skip one and next
+     ft####      mI> ["+e!]   ++                 ; if greater that 64 next, else skip one and next
 mY   ftttt#      mI< ["l-!]   +                  ; if less that 91 print lowercase, else, next
-mY   ftttt###### mI> ["+e!]   ++                 ; if greater than 97
+mY   ftttt###### mI> ["+e!]   ++                 ; if greater than 96
 mY   fftt###     mI< ["U[-]!] +                  ; if less than 123 print uppercase, else, next
 Yj[-]!                                            ; just print it
 

@@ -32,6 +32,9 @@ class SamplesTest extends AnyFunSuite:
   test("switch case"):
     runAndAssert("switchcase", "Ss# ç", "sS# ç")
 
+  test("rot13"):
+    runAndAssert("rot13", "NM nf . egF", "AZ as . rtS")
+
 
   def runAndAssert(seaFile: String, expectedOutput: String, userInput: String = "") =
     val input = Source.fromResource(s"samples/$seaFile.sea")(using Codec(StandardCharsets.UTF_8)).getLines().mkString("\n")
