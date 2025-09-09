@@ -5,6 +5,8 @@ ThisBuild / scalaVersion := "3.7.2"
 
 enablePlugins(ScalaNativePlugin)
 
+Compile/mainClass := Some("team.starfish.lang.starLang")
+
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % "test"
 
 lazy val root = (project in file("."))

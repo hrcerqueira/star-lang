@@ -26,4 +26,6 @@ extension (line: String)
       .map[String](new String(_))
       .toList
       .asScala
+    // remove some utf8 garbage that java leaves behind
+      .filter(c => c.length != 1 || !List(65039, 8419).contains(c.codePointAt(0)))
       .toList

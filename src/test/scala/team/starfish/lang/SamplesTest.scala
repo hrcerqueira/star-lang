@@ -3,7 +3,8 @@ package team.starfish.lang
 import org.scalatest.funsuite.AnyFunSuite
 import team.starfish.lang.alt.AltTokenizer
 
-import scala.io.Source
+import java.nio.charset.StandardCharsets
+import scala.io.{Codec, Source}
 
 class SamplesTest extends AnyFunSuite:
 
@@ -31,8 +32,9 @@ class SamplesTest extends AnyFunSuite:
   test("switch case"):
     runAndAssert("switchcase", "Ss# ç", "sS# ç")
 
+
   def runAndAssert(seaFile: String, expectedOutput: String, userInput: String = "") =
-    val input = Source.fromResource(s"samples/$seaFile.sea").getLines().mkString("\n")
+    val input = Source.fromResource(s"samples/$seaFile.sea")(using Codec(StandardCharsets.UTF_8)).getLines().mkString("\n")
 
     val sourceReader = (file: String) =>
       Source.fromResource(s"samples/$file").getLines().mkString("\n")
@@ -42,7 +44,7 @@ class SamplesTest extends AnyFunSuite:
     assert(output == expectedOutput)
 
     testStarsWithDialect(BlandDialect, tokenizer, input, expectedOutput, userInput)
-//    testStarsWithDialect(BeautifulDialect, tokenizer, input, expectedOutput, userInput)
+    testStarsWithDialect(BeautifulDialect, tokenizer, input, expectedOutput, userInput)
 
 
 
@@ -50,9 +52,18 @@ class SamplesTest extends AnyFunSuite:
     val tokens = tokenizer.tokenize(input)
     val converted = StarWriter(dialect).write(tokens)
 
-    println(converted)
+//    dialect.identifierMap.toList.sortBy(_._1).foreach: i =>
+//      println(s"${i._1} - ${i._2}")
 
-    val starTokenizer = MainSyntaxStarTokenizer(dialect, strict = false)
+//    println(converted)
+
+    val starTokenizer = MainSyntaxStarTokenizer(dialect)
+
+//    val tokens2 = starTokenizer.tokenize(converted)
+//    val converted2 = StarWriter(dialect).write(tokens2)
+//
+//    println(converted2)
+
     val outputFromStars = parseAndRun(converted, starTokenizer, userInput, "none")
     assert(outputFromStars == expectedOutput)
 

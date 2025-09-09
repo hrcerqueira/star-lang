@@ -2,7 +2,9 @@ package team.starfish.lang
 
 import team.starfish.lang.alt.AltTokenizer
 
+import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file.Paths
+import scala.io.Codec
 import scala.util.Using
 
 def parseAndRun(code: String, usingTokenizer: StarTokenizer, userInput: String = "", logLevel: String = "none") =

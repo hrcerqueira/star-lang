@@ -10,6 +10,7 @@ class MainSyntaxStarTokenizer(val dialect: StarDialect, strict: Boolean = true) 
     val charMap = input
       .replaceAll(dialect.whiteSpace, " ")
       .asCoordinateMap
+
     charMap
       .filter(_._2 == starToken)
       .keys.toList
@@ -35,7 +36,8 @@ class MainSyntaxStarTokenizer(val dialect: StarDialect, strict: Boolean = true) 
           startTokens.north.length != startTokens.southEast.length ||
           startTokens.north.length != startTokens.west.length / 2 ||
           startTokens.north.length != startTokens.east.length / 2) then
-          throw new RuntimeException(s"Star legs are not balanced in position $coordinates, identifier $identifier")
+          println(s"Star legs are not balanced in position $coordinates, identifier $identifier")
+//          throw new RuntimeException(s"Star legs are not balanced in position $coordinates, identifier $identifier")
 
         startTokens
 

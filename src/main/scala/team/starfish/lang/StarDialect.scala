@@ -52,42 +52,83 @@ private val OkDialect = StarDialect(
     OkIdentifiersMap,
 )
 
-private val bloodACodePoint = "\uD83D\uDC08️".codePoints().findFirst().getAsInt
+private val BeautifulIdentifiersMap = List(
+  "#" -> "#\uFE0F⃣",
+  "\"" -> "\uD83E\uDE87",
+  "%" -> "\uD83D\uDD96",
+  "<" -> "\uD83D\uDC08",
+  ">" -> "\uD83D\uDC15",
+  "$" -> "\uD83D\uDC20",
+  "@" -> "\uD83D\uDC40",
 
-private val lowerCaseEmojiLetters = 0.until(26)
-  .map: i =>
-    ('a' + i).toChar.toString -> Character.toChars(bloodACodePoint + i).mkString
-  .toList
+  "a" -> "\u2708\uFE0F", // airplane
+  "b" -> "\uD83C\uDF88\uFE0F", // balloon
+  "c" -> "\uD83C\uDF35\uFE0F", // cactus
+  "d" -> "\uD83D\uDC36\uFE0F", // dog
+  "e" -> "\uD83E\uDD85\uFE0F", // eagle
+  "f" -> "\uD83D\uDD25\uFE0F", // fire
+  "g" -> "\uD83D\uDC7B\uFE0F", // ghost
+  "h" -> "\uD83C\uDFE0\uFE0F", // house
+  "i" -> "\uD83C\uDF66\uFE0F", // ice cream
+  "j" -> "\uD83C\uDF83\uFE0F", // jack-o-lantern
+  "k" -> "\uD83D\uDC28\uFE0F", // koala
+  "l" -> "\uD83E\uDD81\uFE0F", // lion
+  "m" -> "\uD83D\uDC12\uFE0F", // monkey
+  "n" -> "\uD83D\uDC43\uFE0F", // nose
+  "o" -> "\uD83D\uDC19\uFE0F", // octopus
+  "p" -> "\uD83C\uDF55\uFE0F", // pizza
+  "q" -> "\u2753\uFE0F", // question mark
+  "r" -> "\uD83D\uDE80\uFE0F", // rocket
+  "s" -> "\uD83D\uDC0D\uFE0F", // snake
+  "t" -> "\uD83C\uDF2E\uFE0F", // taco
+  "u" -> "\u2602\uFE0F", // umbrella
+  "v" -> "\uD83C\uDFBB\uFE0F", // violin
+  "w" -> "\uD83D\uDC0B\uFE0F", // whale
+  "x" -> "\uD83E\uDE7B\uFE0F", // x-ray (emoji presentation)
+  "y" -> "\uD83E\uDDF6\uFE0F", // yarn
+  "z" -> "\uD83E\uDD93\uFE0F", // zebra
 
-private val smileCodePoint = "\uD83D\uDE42".codePoints().findFirst().getAsInt
+  "A" -> "\uD83D\uDE91\uFE0F", // ambulance
+  "B" -> "\uD83E\uDD8B\uFE0F", // butterfly
+  "C" -> "\uD83D\uDC08\uFE0F", // cat
+  "D" -> "\uD83D\uDC2C\uFE0F", // dolphin
+  "E" -> "\uD83D\uDC18\uFE0F", // elephant
+  "F" -> "\uD83D\uDC38\uFE0F", // frog
+  "G" -> "\uD83E\uDD92\uFE0F", // giraffe
+  "H" -> "\uD83E\uDD94\uFE0F", // hedgehog
+  "I" -> "\uD83E\uDDCA", // ice
+  "J" -> "\uD83D\uDC56\uFE0F", // jeans
+  "K" -> "\uD83D\uDD11\uFE0F", // key
+  "L" -> "\uD83C\uDF4B\uFE0F", // lemon
+  "M" -> "\uD83C\uDFCD\uFE0F", // motorcycle
+  "N" -> "\uD83D\uDC85\uFE0F", // nail polish
+  "O" -> "\uD83E\uDD89\uFE0F", // owl
+  "P" -> "\uD83D\uDC27\uFE0F", // penguin
+  "Q" -> "\u2754\uFE0F", // white question mark
+  "R" -> "\uD83C\uDF39\uFE0F", // rose
+  "S" -> "\u2600\uFE0F", // sun
+  "T" -> "\uD83D\uDC2F\uFE0F", // tiger
+  "U" -> "\uD83E\uDD84\uFE0F", // unicorn
+  "V" -> "\uD83C\uDF0B\uFE0F", // volcano
+  "W" -> "\uD83D\uDC3A\uFE0F", // wolf
+  "X" -> "\uD83E\uDE7B\uFE0E", // x-ray (text presentation; distinct 2-codepoint sequence)
+  "Y" -> "\uD83E\uDD80\uFE0F", // yarn? Actually yak -> use yak
+  "Z" -> "\uD83E\uDDDF\uFE0F", // zombie
 
-private val upperCaseEmojiLetters = 0.until(26)
-  .map: i =>
-    ('A' + i).toChar.toString -> Character.toChars(smileCodePoint + i).mkString
-  .toList
-
-private val BeautifulIdentifiersMap = (
-  (BlandDialect.mainStar -> "\uD83D\uDC20") ::
-    ("#" -> "#\uFE0F⃣") ::
-    ("\"" -> "\uD83C\uDDF5\uD83C\uDDF9") ::
-    ("%" -> "\uD83C\uDDE9\uD83C\uDDEA") ::
-    ("<" -> "\uD83D\uDC08") ::
-    (">" -> "\uD83D\uDC15") ::
-    (lowerCaseEmojiLetters ++ upperCaseEmojiLetters)
-  ).toMap
+).toMap
 
 
 private val BeautifulDialect = StarDialect(
   tokenMap = Map(
     "⭐" -> STAR,
     "\uD83C\uDF1F" -> PADDING, // 🌟
-    "\uD83D\uDC4D" -> INCREMENT, // 👍
-    "\uD83D\uDC4E" -> DECREMENT, // 👎
+    "\uD83D\uDD06" -> INCREMENT, // 🔆
+    "\uD83D\uDD05" -> DECREMENT, // 🔅
     "\uD83D\uDED1" -> DONE, // 🛑
     "💫" -> BEGIN_CONTROL, // 💫
     "\uD83D\uDD01" -> BEGIN_CONTROL_DIVISION, // 🔁
     "\uD83C\uDFC1" -> END_CONTROL, // 🏁
-    "✍\uFE0F" -> PRINT, // ✍️
+    "\uD83D\uDCDD" -> PRINT, // 📝
     "\uD83D\uDD0E" -> READ, // 🔎
   ),
   mainStar = "\uD83D\uDC20", // 🐠
