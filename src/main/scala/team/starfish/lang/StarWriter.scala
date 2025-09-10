@@ -2,7 +2,9 @@ package team.starfish.lang
 
 import team.starfish.lang.StarMetaInstructions.{PADDING, STAR}
 
-import scala.util.boundary, boundary.break
+import scala.util.boundary
+import boundary.break
+import scala.collection.mutable
 
 class StarWriter(private val dialect: StarDialect):
 
@@ -37,23 +39,58 @@ class StarWriter(private val dialect: StarDialect):
     buffer.map(_.mkString).mkString("\n")
 
 
-  private def setCoordinates(withCoordinates: List[TokensAndBounds], missingCoordinates: List[StarTokens]): List[TokensAndBounds] =
+  private def setCoordinates(
+    withCoordinates: List[TokensAndBounds],
+    missingCoordinates: List[StarTokens],
+    pointsMap: mutable.Set[(Int, Int)] = mutable.Set(),
+    preTested: mutable.Map[(Int, Int), Int] = mutable.Map()
+  ): List[TokensAndBounds] =
+
+    if pointsMap.isEmpty then
+      withCoordinates.foreach: wc =>
+        val points = pointsWithShadow(wc)
+        pointsMap.addAll(points)
+
+    def pointsWithShadow(tnb: TokensAndBounds) =
+      val basePoints = generateStarPoints(tnb.tokens).map:
+        case (x, y, symbol) => (x, y)
+
+      basePoints.flatMap:
+        case (x, y) => List(
+          (x, y - 1), (x + 1, y - 1),
+          (x, y), (x + 1, y)
+        )
+      .toSet
+    
+    def clashes(testPoints: Set[(Int, Int)]): Boolean =
+      pointsMap.intersect(testPoints).nonEmpty
+
+    def inPretested(px: Int, py: Int, legSize: Int): Boolean =
+      preTested.contains((px, py)) && preTested((px, py)) >= legSize
+
     missingCoordinates match
       case Nil => withCoordinates
       case tokens :: rest =>
 
         boundary[List[TokensAndBounds]]:
           for ((x, y) <- spiralFrom(0, 0)) do
-            val testTokens = tokens.copy(coordinates = StarCoordinates(x * 2, y)).withBounds
 
-            if !withCoordinates.exists(clash(_, testTokens)) then
-              break(setCoordinates(testTokens :: withCoordinates, rest))
+            if !inPretested(x, y, tokens.legSize) then
+
+              val testTokens = tokens.copy(coordinates = StarCoordinates(x * 2, y)).withBounds
+              val testPoints =  pointsWithShadow(testTokens)
+
+              if !clashes(testPoints) then
+                pointsMap.addAll(testPoints)
+                break(setCoordinates(testTokens :: withCoordinates, rest, pointsMap, preTested))
+              else
+                preTested((x, y)) = tokens.legSize
 
           Nil
 
 
   private def spiralFrom(x0: Int, y0: Int): Iterator[(Int, Int)] = new Iterator[(Int, Int)] {
-    private val dirs = Array((1, 0), (0, -1), (-1, 0), (0, 1)) // R, U, L, D
+    private val dirs = Array((1, 0), (0, -1), (-1, 0), (0, 1))
     private var dirIdx = 0
     private var stepLen = 1
     private var stepsTakenInDir = 0
@@ -112,25 +149,6 @@ class StarWriter(private val dialect: StarDialect):
       tokens.west.mapWithOneBasedIndex(tokens.legSize): (token, i) =>
         (coordinates.x - i, coordinates.y, token.translatedSymbol)
       )
-
-  private def clash(a: TokensAndBounds, b: TokensAndBounds) =
-    val pointsA = pointsWithShadow(a)
-    val pointsB = pointsWithShadow(b)
-
-    pointsA.intersect(pointsB).nonEmpty
-
-
-  private def pointsWithShadow(tnb: TokensAndBounds) =
-    val basePoints = generateStarPoints(tnb.tokens).map:
-      case (x, y, symbol) => (x, y)
-
-    basePoints.flatMap:
-      case (x, y) => List(
-        (x - 1, y - 1), (x, y - 1), (x + 1, y - 1),
-        (x - 1, y), (x, y), (x + 1, y),
-        (x - 1, y + 1), (x, y + 1), (x + 1, y + 1),
-      )
-
 
 
   private def addShadow(points: List[(Int, Int)], size: Int, trf: (Int, Int, Int) => (Int, Int)) =

@@ -58,7 +58,7 @@ class SamplesTest extends AnyFunSuite:
 //    dialect.identifierMap.toList.sortBy(_._1).foreach: i =>
 //      println(s"${i._1} - ${i._2}")
 
-//    println(converted)
+    println(converted)
 
     val starTokenizer = MainSyntaxStarTokenizer(dialect)
 
