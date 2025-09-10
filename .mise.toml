@@ -7,7 +7,7 @@ scala = "3.7.2"
 run = "sbt run"
 
 [tasks.star]
-run = "./target/scala-3.7.2/starlang"
+run = "bin/starlang"
 
 [tasks.build-run]
 run = "sbt run"

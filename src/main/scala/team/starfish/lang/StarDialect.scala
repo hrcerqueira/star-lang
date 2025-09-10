@@ -84,7 +84,7 @@ private val BeautifulIdentifiersMap = List(
   "u" -> "\u2602\uFE0F", // umbrella
   "v" -> "\uD83C\uDFBB\uFE0F", // violin
   "w" -> "\uD83D\uDC0B\uFE0F", // whale
-  "x" -> "\uD83E\uDE7B\uFE0F", // x-ray (emoji presentation)
+  "x" -> "\uD83C\uDF3B", // sunflower
   "y" -> "\uD83E\uDDF6\uFE0F", // yarn
   "z" -> "\uD83E\uDD93\uFE0F", // zebra
 
@@ -111,7 +111,7 @@ private val BeautifulIdentifiersMap = List(
   "U" -> "\uD83E\uDD84\uFE0F", // unicorn
   "V" -> "\uD83C\uDF0B\uFE0F", // volcano
   "W" -> "\uD83D\uDC3A\uFE0F", // wolf
-  "X" -> "\uD83E\uDE7B\uFE0E", // x-ray (text presentation; distinct 2-codepoint sequence)
+  "X" -> "\uD83C\uDF30", // chestnut
   "Y" -> "\uD83E\uDD80\uFE0F", // yarn? Actually yak -> use yak
   "Z" -> "\uD83E\uDDDF\uFE0F", // zombie
 
@@ -122,8 +122,8 @@ private val BeautifulDialect = StarDialect(
   tokenMap = Map(
     "⭐" -> STAR,
     "\uD83C\uDF1F" -> PADDING, // 🌟
-    "\uD83D\uDD06" -> INCREMENT, // 🔆
-    "\uD83D\uDD05" -> DECREMENT, // 🔅
+    "\uD83D\uDD35" -> DECREMENT, // 🔵
+    "\uD83D\uDFE0" -> INCREMENT, // 🟠
     "\uD83D\uDED1" -> DONE, // 🛑
     "💫" -> BEGIN_CONTROL, // 💫
     "\uD83D\uDD01" -> BEGIN_CONTROL_DIVISION, // 🔁
@@ -134,4 +134,10 @@ private val BeautifulDialect = StarDialect(
   mainStar = "\uD83D\uDC20", // 🐠
   whiteSpace = "⚫",
   identifierMap = BeautifulIdentifiersMap,
+)
+
+val allDialects = List(
+  BlandDialect,
+  OkDialect,
+  BeautifulDialect,
 )

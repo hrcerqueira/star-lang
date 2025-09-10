@@ -35,10 +35,16 @@ class SamplesTest extends AnyFunSuite:
   test("rot13"):
     runAndAssert("rot13", "NM nf . egF", "AZ as . rtS")
 
+  test("reverse"):
+    val script = StarScriptGenerators("reverse")(Nil)
+    runAndAssertWithInput(script, "321cba", "abc123")
+
 
   def runAndAssert(seaFile: String, expectedOutput: String, userInput: String = "") =
     val input = Source.fromResource(s"samples/$seaFile.sea")(using Codec(StandardCharsets.UTF_8)).getLines().mkString("\n")
+    runAndAssertWithInput(input, expectedOutput, userInput)
 
+  def runAndAssertWithInput(input: String, expectedOutput: String, userInput: String = "") =
     val sourceReader = (file: String) =>
       Source.fromResource(s"samples/$file").getLines().mkString("\n")
 
@@ -54,17 +60,16 @@ class SamplesTest extends AnyFunSuite:
   def testStarsWithDialect(dialect: StarDialect, tokenizer: AltTokenizer, input: String,expectedOutput: String, userInput: String = "") =
     val tokens = tokenizer.tokenize(input)
     val converted = StarWriter(dialect).write(tokens)
-
+//
 //    dialect.identifierMap.toList.sortBy(_._1).foreach: i =>
-//      println(s"${i._1} - ${i._2}")
-
+//      println(s"${i._1} - ${i._2} ; ${i._2.length}")
+//
     println(converted)
 
     val starTokenizer = MainSyntaxStarTokenizer(dialect)
 
 //    val tokens2 = starTokenizer.tokenize(converted)
 //    val converted2 = StarWriter(dialect).write(tokens2)
-//
 //    println(converted2)
 
     val outputFromStars = parseAndRun(converted, starTokenizer, userInput, "none")
