@@ -66,7 +66,7 @@ class StarWriter(private val dialect: StarDialect):
       pointsMap.intersect(testPoints).nonEmpty
 
     def inPretested(px: Int, py: Int, legSize: Int): Boolean =
-      preTested.contains((px, py)) && preTested((px, py)) >= legSize
+      preTested.contains((px, py)) && preTested((px, py)) <= legSize
 
     missingCoordinates match
       case Nil => withCoordinates
