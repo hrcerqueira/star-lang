@@ -4,10 +4,30 @@ sbt = "1.11.5"
 scala = "3.7.2"
 
 [tasks.build]
-run = "sbt run"
+run = """
+sbt run
+cp target/scala-3.7.2/starlang bin
+"""
 
 [tasks.star]
 run = "bin/starlang"
 
 [tasks.build-run]
 run = "sbt run"
+
+[tasks.convert-samples]
+run = """
+#!/usr/bin/env bash
+mkdir examples
+mkdir beautiful-examples
+rm examples/*
+rm beautiful-examples/*
+
+bin/starlang gen reverse -r > src/test/resources/samples/reverse.sea
+
+for file in src/test/resources/samples/*
+do
+  bin/starlang convert $file > examples/$(basename $file)
+  bin/starlang convert -d beautiful $file > beautiful-examples/$(basename $file)
+done
+"""

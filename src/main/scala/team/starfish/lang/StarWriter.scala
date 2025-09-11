@@ -2,9 +2,9 @@ package team.starfish.lang
 
 import team.starfish.lang.StarMetaInstructions.{PADDING, STAR}
 
-import scala.util.boundary
-import boundary.break
 import scala.collection.mutable
+import scala.util.boundary
+import scala.util.boundary.break
 
 class StarWriter(private val dialect: StarDialect):
 
@@ -73,7 +73,7 @@ class StarWriter(private val dialect: StarDialect):
       case tokens :: rest =>
 
         boundary[List[TokensAndBounds]]:
-          for ((x, y) <- spiralFrom(0, 0)) do
+          for ((x, y) <- MidPointIteratorFactory.iterator) do
 
             if !inPretested(x, y, tokens.legSize) then
 
@@ -87,43 +87,6 @@ class StarWriter(private val dialect: StarDialect):
                 preTested((x, y)) = tokens.legSize
 
           Nil
-
-
-  private def spiralFrom(x0: Int, y0: Int): Iterator[(Int, Int)] = new Iterator[(Int, Int)] {
-    private val dirs = Array((1, 0), (0, -1), (-1, 0), (0, 1))
-    private var dirIdx = 0
-    private var stepLen = 1
-    private var stepsTakenInDir = 0
-    private var segmentsAtThisLen = 0
-    private var x = x0
-    private var y = y0
-    private var first = true
-
-    override def hasNext: Boolean = true
-
-    override def next(): (Int, Int) = {
-      if (first) {
-        first = false
-        (x, y)
-      } else {
-        val (dx, dy) = dirs(dirIdx)
-        x += dx
-        y += dy
-        stepsTakenInDir += 1
-
-        if (stepsTakenInDir == stepLen) {
-          stepsTakenInDir = 0
-          dirIdx = (dirIdx + 1) & 3
-          segmentsAtThisLen += 1
-          if (segmentsAtThisLen == 2) {
-            segmentsAtThisLen = 0
-            stepLen += 1
-          }
-        }
-        (x, y)
-      }
-    }
-  }
 
   private def writeStar(buffer: List[Array[String]], tokens: StarTokens) =
     generateStarPoints(tokens).foreach:

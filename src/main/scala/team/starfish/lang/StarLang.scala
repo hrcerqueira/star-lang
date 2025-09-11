@@ -2,7 +2,7 @@ package team.starfish.lang
 
 import team.starfish.lang.alt.AltTokenizer
 
-import java.nio.charset.{Charset, StandardCharsets}
+import java.io.{BufferedReader, InputStreamReader}
 import java.nio.file.Paths
 import scala.io.Codec
 import scala.util.Using
@@ -85,6 +85,18 @@ def parseOptions(args: String*) =
     remainingArgs = remainingArgs
   )
 
+def consumeInput =
+  Using(InputStreamReader(System.in)): isReader =>
+    val bufReader: BufferedReader = new BufferedReader(isReader)
+
+    def readLines: List[String] =
+      bufReader.readLine().match
+        case null | "" => Nil
+        case line => line :: readLines
+
+    readLines.mkString("\n")
+  .get
+
 @main def starLang(args: String*): Unit =
   if args.isEmpty then
     println("use command{run|convert|alt|gen} [-d dialect{bland|prettier}] file")
@@ -120,7 +132,7 @@ def parseOptions(args: String*) =
 
   Using(scala.io.Source.fromFile(options.script)): source =>
     val input = source.getLines().mkString("\n")
-    val userInput = options.remainingArgs.mkString(" ")
+    val userInput = if options.remainingArgs.isEmpty then consumeInput else options.remainingArgs.mkString(" ")
 
     options.command match
       case "run" =>

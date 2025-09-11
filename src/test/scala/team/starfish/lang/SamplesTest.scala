@@ -39,6 +39,10 @@ class SamplesTest extends AnyFunSuite:
     val script = StarScriptGenerators("reverse")(Nil)
     runAndAssertWithInput(script, "321cba", "abc123")
 
+//  test("game_of_life"):
+//    runAndAssert("game_of_life", "", "")
+
+
 
   def runAndAssert(seaFile: String, expectedOutput: String, userInput: String = "") =
     val input = Source.fromResource(s"samples/$seaFile.sea")(using Codec(StandardCharsets.UTF_8)).getLines().mkString("\n")
