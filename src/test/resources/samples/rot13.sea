@@ -14,7 +14,7 @@ mY   ftttt#         mI< ["o--!]  l--!               ; if less than 91, take 13, 
 
 l
 mY   ftttt######    mI> ["+l!]   +++                ; if greater that 96 next, else skip three and next
-mY   ff#########    mI< ["i-!]   +                  ; if less that 109 add 13, done
+mY   fft            mI< ["i-!]   +                  ; if less that 110 add 13, done
 mY   fftt###        mI< ["o--!]  +                  ; if less than 123, take 13, done
 Yj[-]!                                              ; just print it
 

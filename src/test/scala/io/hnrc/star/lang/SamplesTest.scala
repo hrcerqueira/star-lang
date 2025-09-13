@@ -34,7 +34,7 @@ class SamplesTest extends AnyFunSuite:
     runAndAssert("switchcase", "Ss# ç", "sS# ç")
 
   test("rot13"):
-    runAndAssert("rot13", "NM nf . egF", "AZ as . rtS")
+    runAndAssert("rot13", "NMz nf . egF", "AZm as . rtS")
 
   test("reverse"):
     val script = StarScriptGenerators("reverse")(Nil)

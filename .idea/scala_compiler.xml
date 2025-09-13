@@ -3,24 +3,10 @@
   <component name="ScalaCompilerConfiguration">
     <option name="separateProdTestSources" value="true" />
     <profile name="sbt 1" modules="starlang" />
-    <profile name="sbt 2" modules="starlang.main">
+    <profile name="sbt 3" modules="starlang.main,starlang.test">
       <parameters>
         <parameter value="-Yexplicit-nulls" />
-        <parameter value="-P:scalanative:positionRelativizationPaths:/Users/hernani/dev/personal/starlang/src/main/scala;/Users/hernani/dev/personal/starlang/src/main/scala-3;/Users/hernani/dev/personal/starlang/src/main/java;/Users/hernani/dev/personal/starlang/target/scala-3.7.2/src_managed/main" />
       </parameters>
-      <plugins>
-        <plugin path="$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-native/nscplugin_3.7.2/0.5.8/nscplugin_3.7.2-0.5.8.jar" />
-      </plugins>
-    </profile>
-    <profile name="sbt 3" modules="starlang.test">
-      <parameters>
-        <parameter value="-Yexplicit-nulls" />
-        <parameter value="-P:scalanative:positionRelativizationPaths:/Users/hernani/dev/personal/starlang/src/main/scala;/Users/hernani/dev/personal/starlang/src/main/scala-3;/Users/hernani/dev/personal/starlang/src/main/java;/Users/hernani/dev/personal/starlang/target/scala-3.7.2/src_managed/main" />
-        <parameter value="-P:scalanative:positionRelativizationPaths:/Users/hernani/dev/personal/starlang/src/test/scala;/Users/hernani/dev/personal/starlang/src/test/scala-3;/Users/hernani/dev/personal/starlang/src/test/java;/Users/hernani/dev/personal/starlang/target/scala-3.7.2/src_managed/test" />
-      </parameters>
-      <plugins>
-        <plugin path="$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-native/nscplugin_3.7.2/0.5.8/nscplugin_3.7.2-0.5.8.jar" />
-      </plugins>
     </profile>
   </component>
 </project>
