@@ -1,0 +1,39 @@
+;#include counter.sea
+;#include repeating_counter.sea
+;#include repeating_counter.sea Ii Oo @& bB FG TU PQ Yy Kk
+
+;#include comparisons.sea a@ b#
+;#include comparisons.sea <> a# b@
+
+;#include flag.sea fz
+
+
+N
+[zz] +                         ; reset z
+fm###    I>    ["+N]  -!       ; set # to 47, if @ > 48, then next leg
+mY ftm##  I<   ["+N] --!       ; reset @, set # to 58, if @ < 48, then next leg
+Cxd+
+Kk[mm]m[##]m[-]!                ; resets everything
+
+C          ; take 48 from @
+mY+
+fm##+
+I+
+[##@]+
+[-]!
+
+n
+[m-!]+!
+[m-!]+!
+[m-!]+!
+[m-!]+!
+[m-!]+!
+
+x
+mtm+                  ;sets counter to 10
+[nn&]+                ;sets temp repeat counter & to current n
+[##i[&&mnm]y]+      ; repeats n (10 times), adds the value of &
+---!
+
+d
+m[@@n]!

@@ -1,7 +1,9 @@
 package team.starfish.lang
 
 import org.scalatest.funsuite.AnyFunSuite
-import team.starfish.lang.StarMetaInstructions.PADDING
+import team.starfish.lang.tokenizer.StarMetaInstructions.PADDING
+import team.starfish.lang.tokenizer.{StarCoordinates, StarTokens}
+import team.starfish.lang.utils.withBounds
 
 class TokensAndBoundsTest extends AnyFunSuite:
 

@@ -1,6 +1,9 @@
 package team.starfish.lang
 
-import team.starfish.lang.alt.AltTokenizer
+import team.starfish.lang.parser.StarParser
+import team.starfish.lang.runner.StarRunner
+import team.starfish.lang.tokenizer.{AltTokenizer, BeautifulDialect, BlandDialect, MainSyntaxStarTokenizer, OkDialect, StarDialect, StarTokenizer, allDialects}
+import team.starfish.lang.utils.{StarScriptGenerators, StarWriter}
 
 import java.io.{BufferedReader, InputStreamReader}
 import java.nio.file.Paths
@@ -71,7 +74,7 @@ def parseOptions(args: String*) =
       false
 
   val command = consumeArg("run", "convert", "alt", "gen")
-  val dialect = consumeOption("d", "bland", "stars", "beautiful")
+  val dialect = consumeOption("d", "bland", "ok", "beautiful")
   val logLevel = consumeOption("l", "none", "debug", "trace")
   val raw = consumeFlag("r")
   val script = consumeArg()
@@ -108,10 +111,7 @@ def consumeInput =
         println(e.getMessage)
         return System.exit(1)
 
-  val dialect = options.dialect match
-    case "stars" => OkDialect
-    case "beautiful" => BeautifulDialect
-    case _ => BlandDialect
+  val dialect = StarDialect.byName(options.dialect)
 
   if options.command == "gen" then
     if !StarScriptGenerators.contains(options.script) then
@@ -130,14 +130,15 @@ def consumeInput =
       println(converted)
     System.exit(0)
 
+  def userInput = if options.remainingArgs.isEmpty then consumeInput else options.remainingArgs.mkString(" ")
+
   Using(scala.io.Source.fromFile(options.script)): source =>
     val input = source.getLines().mkString("\n")
-    val userInput = if options.remainingArgs.isEmpty then consumeInput else options.remainingArgs.mkString(" ")
 
     options.command match
       case "run" =>
         val realDialect = if dialect == BlandDialect && input.charAt(0) != ' ' then
-          allDialects.find(_.whiteSpace.charAt(0) == input.charAt(0)).getOrElse(dialect)
+          StarDialect.byMarker(input.charAt(0))
         else dialect
         val output = parseAndRun(input.mkString, MainSyntaxStarTokenizer(realDialect), userInput, options.logLevel)
         println(output)

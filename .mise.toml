@@ -27,6 +27,7 @@ bin/starlang gen reverse -r > src/test/resources/samples/reverse.sea
 
 for file in src/test/resources/samples/*
 do
+  echo "converting $(basename $file)"
   bin/starlang convert $file > examples/$(basename $file)
   bin/starlang convert -d beautiful $file > beautiful-examples/$(basename $file)
 done

@@ -1,14 +1,14 @@
 package team.starfish.lang
 
 import org.scalatest.funsuite.AnyFunSuite
-import team.starfish.lang.alt.AltTokenizer
+import team.starfish.lang.tokenizer.AltTokenizer
 
 class AltTokenizerTest extends AnyFunSuite:
   
   test("tokenize one star"):
     val input =
       """
-        |f 10 10
+        |f.10.10
         |[.]!
         |+++""".stripMargin
       

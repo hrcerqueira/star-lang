@@ -1,7 +1,8 @@
 package team.starfish.lang
 
 import org.scalatest.funsuite.AnyFunSuite
-import team.starfish.lang.alt.AltTokenizer
+import team.starfish.lang.tokenizer.{AltTokenizer, BeautifulDialect, BlandDialect, MainSyntaxStarTokenizer, StarDialect}
+import team.starfish.lang.utils.{StarScriptGenerators, StarWriter}
 
 import java.nio.charset.StandardCharsets
 import scala.io.{Codec, Source}
@@ -39,6 +40,9 @@ class SamplesTest extends AnyFunSuite:
     val script = StarScriptGenerators("reverse")(Nil)
     runAndAssertWithInput(script, "321cba", "abc123")
 
+  test("read number test"):
+    runAndAssert("read_number_test", "h", "104")
+
 //  test("game_of_life"):
 //    runAndAssert("game_of_life", "", "")
 
@@ -68,7 +72,7 @@ class SamplesTest extends AnyFunSuite:
 //    dialect.identifierMap.toList.sortBy(_._1).foreach: i =>
 //      println(s"${i._1} - ${i._2} ; ${i._2.length}")
 //
-    println(converted)
+//    println(converted)
 
     val starTokenizer = MainSyntaxStarTokenizer(dialect)
 
