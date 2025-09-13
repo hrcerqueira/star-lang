@@ -1,7 +1,7 @@
-package team.starfish.lang
+package io.hnrc.star.lang
 
+import io.hnrc.star.lang.utils.MidPointIteratorFactory
 import org.scalatest.funsuite.AnyFunSuite
-import team.starfish.lang.utils.MidPointIteratorFactory
 
 class MidPointGeneratorTest extends AnyFunSuite:
 

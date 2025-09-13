@@ -1,4 +1,4 @@
-package team.starfish.lang
+package io.hnrc.star.lang
 
 import org.scalatest.funsuite.AnyFunSuite
 

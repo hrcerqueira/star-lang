@@ -1,8 +1,8 @@
-package team.starfish.lang.parser
+package io.hnrc.star.lang.parser
 
-import team.starfish.lang.tokenizer.StarInstruction.*
-import team.starfish.lang.tokenizer.StarMetaInstructions.DEBUG
-import team.starfish.lang.tokenizer.{StarIdentifier, StarToken, StarTokenList, StarTokens}
+import io.hnrc.star.lang.tokenizer.StarInstruction.*
+import io.hnrc.star.lang.tokenizer.StarMetaInstructions.DEBUG
+import io.hnrc.star.lang.tokenizer.{StarIdentifier, StarToken, StarTokenList, StarTokens}
 
 object StarParser:
 

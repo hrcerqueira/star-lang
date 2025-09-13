@@ -1,4 +1,4 @@
-package team.starfish.lang.utils
+package io.hnrc.star.lang.utils
 
 import scala.jdk.CollectionConverters.*
 import scala.util.boundary

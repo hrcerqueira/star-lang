@@ -1,7 +1,7 @@
-package team.starfish.lang.tokenizer
+package io.hnrc.star.lang.tokenizer
 
-import team.starfish.lang.*
-import team.starfish.lang.utils.*
+import io.hnrc.star.lang.*
+import io.hnrc.star.lang.utils.*
 
 trait StarTokenizer:
   val dialect: StarDialect

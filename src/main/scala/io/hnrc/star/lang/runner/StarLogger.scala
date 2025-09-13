@@ -1,6 +1,6 @@
-package team.starfish.lang.runner
+package io.hnrc.star.lang.runner
 
-import team.starfish.lang.parser.{Debug, Decrement, Done, IfReferenceNotZero, IfSelfFullSpin, IfSelfNotZero, Increment, JumpToStar, Print, Read, StarControlNode, StarNodeList}
+import io.hnrc.star.lang.parser.{Debug, Decrement, Done, IfReferenceNotZero, IfSelfFullSpin, IfSelfNotZero, Increment, JumpToStar, Print, Read, StarControlNode, StarNodeList}
 
 class StarLogger(logLevel: String, runner: StarRunner):
 

@@ -1,8 +1,8 @@
-package team.starfish.lang
+package io.hnrc.star.lang
 
+import io.hnrc.star.lang.tokenizer.{AltTokenizer, BeautifulDialect, BlandDialect, MainSyntaxStarTokenizer, StarDialect}
+import io.hnrc.star.lang.utils.{StarScriptGenerators, StarWriter}
 import org.scalatest.funsuite.AnyFunSuite
-import team.starfish.lang.tokenizer.{AltTokenizer, BeautifulDialect, BlandDialect, MainSyntaxStarTokenizer, StarDialect}
-import team.starfish.lang.utils.{StarScriptGenerators, StarWriter}
 
 import java.nio.charset.StandardCharsets
 import scala.io.{Codec, Source}

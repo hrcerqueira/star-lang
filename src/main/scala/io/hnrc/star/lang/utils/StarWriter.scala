@@ -1,7 +1,8 @@
-package team.starfish.lang.utils
+package io.hnrc.star.lang.utils
 
-import team.starfish.lang.tokenizer.StarMetaInstructions.{PADDING, STAR}
-import team.starfish.lang.tokenizer.*
+import io.hnrc.star.lang.tokenizer.{StarCoordinates, StarDialect, StarIdentifier, StarToken, StarTokens}
+import io.hnrc.star.lang.tokenizer.StarMetaInstructions.{PADDING, STAR}
+import io.hnrc.star.lang.tokenizer.*
 
 import scala.collection.mutable
 import scala.util.boundary

@@ -1,8 +1,7 @@
-package team.starfish.lang.tokenizer
+package io.hnrc.star.lang.tokenizer
 
-import team.starfish.lang.tokenizer.StarInstruction.*
-import team.starfish.lang.tokenizer.StarMetaInstructions.*
-import team.starfish.lang.tokenizer.StarToken
+import StarInstruction.*
+import StarMetaInstructions.*
 
 case class StarDialect(
   tokenMap     : Map[String, StarToken],
@@ -145,6 +144,6 @@ private val allDialects = Map(
 )
 
 object StarDialect:
-  
+
   def byName(name: String): StarDialect = allDialects(name)
   def byMarker(marker: Char): StarDialect = allDialects.values.find(_.whiteSpace.charAt(0) == marker).get

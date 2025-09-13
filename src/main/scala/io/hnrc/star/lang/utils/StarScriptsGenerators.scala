@@ -1,4 +1,4 @@
-package team.starfish.lang.utils
+package io.hnrc.star.lang.utils
 
 type StarScriptGenerator = (args: List[String]) => String
 

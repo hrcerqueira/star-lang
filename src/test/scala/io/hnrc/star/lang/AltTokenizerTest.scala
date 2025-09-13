@@ -1,7 +1,7 @@
-package team.starfish.lang
+package io.hnrc.star.lang
 
+import io.hnrc.star.lang.tokenizer.AltTokenizer
 import org.scalatest.funsuite.AnyFunSuite
-import team.starfish.lang.tokenizer.AltTokenizer
 
 class AltTokenizerTest extends AnyFunSuite:
   

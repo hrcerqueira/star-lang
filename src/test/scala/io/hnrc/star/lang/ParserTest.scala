@@ -1,9 +1,9 @@
-package team.starfish.lang
+package io.hnrc.star.lang
 
+import io.hnrc.star.lang.parser.{IfSelfNotZero, StarParser}
+import io.hnrc.star.lang.tokenizer.{StarIdentifier, StarTokens}
 import org.scalatest.funsuite.AnyFunSuite
-import team.starfish.lang.parser.{IfSelfNotZero, StarParser}
-import team.starfish.lang.tokenizer.StarInstruction.*
-import team.starfish.lang.tokenizer.{StarIdentifier, StarTokens}
+import io.hnrc.star.lang.tokenizer.StarInstruction.*
 
 class ParserTest extends AnyFunSuite:
   

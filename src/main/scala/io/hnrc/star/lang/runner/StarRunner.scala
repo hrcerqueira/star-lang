@@ -1,8 +1,8 @@
-package team.starfish.lang.runner
+package io.hnrc.star.lang.runner
 
-import team.starfish.lang.*
-import team.starfish.lang.parser.{Debug, Decrement, Done, IfReferenceNotZero, IfSelfFullSpin, IfSelfNotZero, Increment, JumpToStar, Print, Read, Sea, StarControlNode, StarFish, StarNode, StarNodeList}
-import team.starfish.lang.utils.{also, utf8Chars}
+import io.hnrc.star.lang.parser.{Debug, Decrement, Done, IfReferenceNotZero, IfSelfFullSpin, IfSelfNotZero, Increment, JumpToStar, Print, Read, Sea, StarControlNode, StarFish, StarNode, StarNodeList}
+import io.hnrc.star.lang.*
+import io.hnrc.star.lang.utils.{also, utf8Chars}
 
 import scala.collection.mutable
 
@@ -22,7 +22,7 @@ private class StarRunner(sea: Sea, userInput: String = "", logLevel: String = "n
   private[runner] val executionStack = mutable.Stack[StackEntry]()
   private[runner] val state: State = mutable.Map[String, Int]()
   private val output: StringBuilder = new StringBuilder()
-  
+
   private val logger = StarLogger(logLevel, this)
   import logger._
 
@@ -32,7 +32,7 @@ private class StarRunner(sea: Sea, userInput: String = "", logLevel: String = "n
     star.addToStack()
     runStack()
     output.toString()
-  
+
   private def runStack() =
     while executionStack.nonEmpty do
       val entry = executionStack.head
@@ -96,7 +96,7 @@ private class StarRunner(sea: Sea, userInput: String = "", logLevel: String = "n
 
       pushToStack(star, executionLeg, isControl = false)
 
-    
+
     private def executeNodes(nodes: StarNodeList): Unit = nodes match
       case Nil =>
         val popped = popFromStack()

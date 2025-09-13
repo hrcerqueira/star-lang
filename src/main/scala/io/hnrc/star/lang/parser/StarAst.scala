@@ -1,4 +1,4 @@
-package team.starfish.lang.parser
+package io.hnrc.star.lang.parser
 
 sealed trait StarNode
 

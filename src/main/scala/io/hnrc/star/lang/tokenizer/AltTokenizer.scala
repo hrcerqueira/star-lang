@@ -1,10 +1,10 @@
-package team.starfish.lang.tokenizer
+package io.hnrc.star.lang.tokenizer
 
-import team.starfish.lang.*
-import team.starfish.lang.tokenizer.StarInstruction.*
-import team.starfish.lang.tokenizer.StarMetaInstructions.*
-import team.starfish.lang.tokenizer.{BlandDialect, StarCoordinates, StarDialect, StarIdentifier, StarTokenList, StarTokenizer, StarTokens}
-import team.starfish.lang.utils.{CharacterGenerator, let, utf8Chars}
+import io.hnrc.star.lang.*
+import StarInstruction.*
+import StarMetaInstructions.*
+import io.hnrc.star.lang.utils.CharacterGenerator
+import io.hnrc.star.lang.utils.{let, utf8Chars}
 
 import scala.::
 

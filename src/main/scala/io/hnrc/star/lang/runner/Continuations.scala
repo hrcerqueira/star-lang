@@ -1,6 +1,6 @@
-package team.starfish.lang.runner
+package io.hnrc.star.lang.runner
 
-import team.starfish.lang.parser.StarNodeList
+import io.hnrc.star.lang.parser.StarNodeList
 
 sealed trait ExecutionContinuation
 

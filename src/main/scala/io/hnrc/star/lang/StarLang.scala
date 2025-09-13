@@ -1,9 +1,10 @@
-package team.starfish.lang
+package io.hnrc.star.lang
 
-import team.starfish.lang.parser.StarParser
-import team.starfish.lang.runner.StarRunner
-import team.starfish.lang.tokenizer.{AltTokenizer, BeautifulDialect, BlandDialect, MainSyntaxStarTokenizer, OkDialect, StarDialect, StarTokenizer, allDialects}
-import team.starfish.lang.utils.{StarScriptGenerators, StarWriter}
+import io.hnrc.star.lang.parser.StarParser
+import io.hnrc.star.lang.runner.StarRunner
+import io.hnrc.star.lang.tokenizer.{AltTokenizer, BeautifulDialect, BlandDialect, MainSyntaxStarTokenizer, OkDialect, StarDialect, StarTokenizer}
+import io.hnrc.star.lang.utils.{StarScriptGenerators, StarWriter}
+import io.hnrc.star.lang.tokenizer.{allDialects}
 
 import java.io.{BufferedReader, InputStreamReader}
 import java.nio.file.Paths

@@ -1,4 +1,4 @@
-package team.starfish.lang.tokenizer
+package io.hnrc.star.lang.tokenizer
 
 sealed trait StarToken
 
