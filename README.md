@@ -4,8 +4,8 @@ Beyond five stars!
 
 ## What is it?
 
-This is THE Star language. Done, next question.
-
+This is THE Star language. Here's a picture of the StarLang council in action.
+![PXL_20250508_182953233.jpg](council.jpg)
 ## No, seriously
 
 Ok, fine. So this is a star-themed esolang, fitting in the two-dimentional languages category, with two major goals:
@@ -18,7 +18,7 @@ Ok, fine. So this is a star-themed esolang, fitting in the two-dimentional langu
 Again, this is all about stars. It started being about starfishes, but after researching a bit I concluded that starfishes are honestly vey uninteresting, so I decided to go with stars in general. In the end, everything is mixed, so your first exercise in StarLang is to make sense of it.
 
 - Code is organized in stars, each star has a name that is a single character, and yes, you can use unicode characters, I actually recommend you use fancy emojis
-- Each star has 5 legs, north is teh one going up, then go clockwise to the east, southeast, southwest, and west.
+- Each star has 5 legs, north is the one going up, then go clockwise to the east, southeast, southwest, and west.
 - Stars have a state, which is an integer value representing how much light they are emitting; a zero just means they are completely off, which I believe a real star can't do, but I am not a physicist... Maybe is an eclipse or something
 - Stars live very far away from each other, so they can't interact much with each other, all they can see is if another star is lit or not, and they can poke other stars; again, not a physicist, don't ask me how
 - Also, stars are balls of fire, or just spongy creatures that can't move. Either way, none of those have brains, so they are dumb, they can't really do much
@@ -26,11 +26,19 @@ Again, this is all about stars. It started being about starfishes, but after res
   - They can do something repeatedly while themselves or some other star is lit
   - They can also do something repeatedly while themselves have at least some intensity
   - They can read one character from the standard input and make their light match that character, or print their value as a matching character (no, I could not think of a metaphor here, hard to do so when talking about things that don't do anything and just exist)
-- Every time a star is pocked, only one of their legs moves, which depends on how much light they are emitting. Ah ah, star dumb or something
+- Every time a star is poked, only one of their legs moves, which depends on how much light they are emitting. Ah ah, star dumb or something
 - If a star leg is done executing, it just goes again, unless explicitly stopped
 
 
 ## Enough jokes, on to the nerdy stuff!!
+
+StarLang is an esolang. It is close to being turing complete, is actually what is called a turing tarpit. To actually be turing complete it would have to be memory unbound, which is not, since there's a limit (albeit a big one) in the number of stars, meaning that memory is constrained. We could also get by, by making the star values limitless, but hey, it is what it is.    
+
+Now I haven't run a formal proof on this, I like to waste my time only up to a point, but I am fairly confident,  so my source is "trust me bro". Also, the fact that the instruction set is somehow similar to brainfuck, which has the exact same limitation.
+
+StarLang also fits in the two-dimensional language category, meaning, code is laid out in the two-dimensional space, and flows in every direction.    
+
+
 
 ### Syntax
 
@@ -44,8 +52,8 @@ Every instruction is a single character. Instructions are either baked in or the
 - 🛑 says that the star is done executing. It's a stop sign, not a red ball.
 - 💫 begins a control, meaning, the following code will be executed repeatedly as long as some star is lit
   - if followed by a star name, that is the star that is checked
-  - if followed by something else, the current star is teh reference
-- 🔁 begins a control division. Basically there is an integer division on the star value by 5, if the result is at least 1, the control code executes  
+  - if followed by something else, the current star is the reference
+- 🔁 begins a division control. Basically there is an integer division on the star value by 5, if the result is at least 1, the control code executes  
   - This only works on the current star, so you cannot reference another star
   - It only exists to make math easier, cause now you can treat a star as having 10 legs. Don't make sense? yeah, I know... 
 - 🏁 ends a control, code following it, is outside the control. 
@@ -57,6 +65,8 @@ Every instruction is a single character. Instructions are either baked in or the
 - Any other character results in poking the star with that name, if it exists. Otherwise, an error is raised. Except
   - When declaring a star
   - The first character of a control, in which case it just means which star to check for litness (yeah, not a word, but you get it)
+
+Star leg size must be balanced to be beautiful, but computers suck, and if you print out a star with all legs using the same amount of characters it will look weird, so after a long StarLang council meeting, we decided that the east and west legs must have twice the size of the others. Another cool thing for you to deal with.     
 
 ## Program layout
 
@@ -109,7 +119,9 @@ The above example simply prints an exclamation mark, it's the first printable ch
 
 See below how to try this out.
 
-### TODO, look at more examples
+### More examples
+
+At some point in time, in between this heading and the next one there was a beautiful explanation of the `smarter_surprise` sample, but in the end it looked like one of those multi level marketing social media posts, with more emojis than letters, so I moved the explanation below, using the alternative syntax. Oh yeah, there is one of those.  
 
 ## Running it
 
@@ -162,5 +174,179 @@ zlcnffjbeq
 
 Note, if you want to encrypt it multiple times to be on the safe side, just make sure its a odd number of times. The result when you encrypt it an even number of times is not very secure. 
 
+### game_of_life
 
-### TODO, explain how to write and test programs without going insane
+This is supposed to be an implementation of the conway game of life, but is not complete. In fact is barely started. Anyway, feel free to still run it and feel utterly disappointed.  
+
+### Writing starlang programs without going insane
+
+I am very much nit an insane person, so I did not write any of the sample programs by composing stars by hand. For that there is an alternative yucky syntax, that just looks awful, but it is easier to understand unfortunately, because we humans do not comprehend true beauty. 
+
+The idea is, star legs are just sets of instructions, and each star has 5 of them, so we can just use boring old characters distributed in 5 lines and call it a day. We also need the star name, but that goes first. Here's the  example from above in alternative syntax.
+
+```
+$
+++++++
+++++++
+++++++
+++++++
++++++++++.!
+```
+
+Pretty bland... But the example is also stupid. Here's a list of the available instructions.
+
+- `+` increment the star value by 1
+- `-` decrement the star value by 1
+- `!` finish star execution
+- `[` begins control
+- `{`  begins a division control
+- `.` prints the value
+- `?` reads a value
+- any other character is star names
+- no padding or special white space character
+- `*` marks a star, but in this syntax is not used, only if you use these characters to produce ugly stars, which is also possible and I am not explaining it here because I don't want you to do it. 
+
+
+Essentially the syntax is as follows
+
+```
+C          ; a start starts with it's name, this one is called C. It also supports comments, did I not say that? anything after a semicolon is a comment
+mY+        ; each of the following lines represents a leg, this one is the north leg
+fm   ##+   ; east, also, white space in betwen instructions is ignored
+I+         ; souteast
+[##@]+     ; southwest
+[-]!       ; west
+
+```
+
+- A blank line (or EOF) denotes the end of a star
+- You don't need to fill or balance all the legs, padding will be used when converting
+
+
+#### A smarter surprise 
+
+
+```
+$                 
+t+
+tttt+
+t+
+m+
+[tt+]-.!
+
+
+m
++!
+-!
+
+t
+[m-!]+
+[m-!]+
+[m-!]+
+[m-!]+
+[m-!]+!
+```
+Ugly but kind of neat? Here's an explanation.
+
+Let's look at the `m` star first. Its called `m` for `mode`, you will see why in a minute.
+
+```
+m
++!
+-!
+```
+
+- When this star is poked and the current value is zero, it executes the north leg, which just increments the value by one and terminates.
+- When this star is poked and the current value is 1, it executes the east star, which just decrements it, flipping it back to zero. 
+- Essentially this star flips between 0 and 1 every time is poked, essentially acting as a flag.
+
+Now the `t` star. The `t` stands for thirty because we will fill it up to thirty. Fun, right?
+
+- When this star is poked all the legs act similarly, except the west (last) one
+- We have a control in the beginning, enclosed between [], the `m` means, check if `m` is lit, if yes, execute the rest of the instructions
+- The instructions are, decrement the value, terminate star execution. Essentially, if `m` is 1, the `t` star decrements itself.
+- Remember that controls are repeated while the condition is met, so if we didn't terminate it, we would have an infinite loop 
+- If the `m` value is zero, it will skip the control, and just increment itself. 
+- Now the trick here is that each leg increments its value by one but does not terminate, which means execution continues on the next leg, which will repeat the process, eventually reaching the west leg that terminates after incrementing. 
+- Essentially every time `t` is poked and `m` is 0, `t` is incremented by 5
+
+Now on to the main star, which is `$` in this dialect.
+
+- When we start execution, everything is zero, so all three stars, m, `t` and $ are set to zero.
+- The north leg in the main star is executed, it just pokes `t` once, and increments itself.
+- `t` is now 5, since `m` is still 0, and $ is 1
+- Now execution moves to the east leg, 1 % 5 = 0
+- Here we just poke `t` another 4 times, and increment. `t` is now 25, $ is 2
+- This leg is a bit longer, we're just trying to be smart with leg sizes since east and west need to be twice the size, as the others and we want to generate smaller stars. They are much cuter.
+- The southeast leg is just more of the same, poke `t` once, increment. `t` is now 30, $ is 3
+- The real fun begins now, are you as excited as I am?
+- The northwest leg just pokes m, now `m` is 1, meaning, from now on, poking `t` will make it decrement by 1. Current start, t=30, m=1, $=4
+- Finally, the west leg. The first thing we have is a control where we chck the value of t
+- If `t` is not zero, we poke t, remember the first `t` in the control is the name of the star we are checking, this second `t` is us poking it.
+- Then we also increment the $ star. So this control, every time it runs, `t` is decremented by 1, `$` is incremented by 1.
+- Eventually `t` reaches zero and the control stops, at this point, the value of `$` is 34
+- Remember that we want to print an exclamation mark, and the $ value is 34, which is a `"` and printing just that would be silly.  
+- `!` codepoint is 33, so we remove the difference, which is just 1.
+- We finally print it with `.` and call it a day.
+
+Amazing right? About 50 characters to print a `!`. Lets compare it to java
+
+```java
+package io.hnrc.star.lang;
+
+public class ExclamationMarkerPrinter {
+    
+    public void main(String... args) {
+        System.out.println("!");
+    }
+}
+
+```
+
+I am not counting that crap. But is like 100, way to many!!!
+
+PS: You python bozos stay on your lane.
+
+Finally put this puppy in a file and lets convert it to proper beautiful code.
+
+```shell
+bin/starlang convert -d beautiful smarter_surprise.sea
+⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫
+⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫🟠⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫
+⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫🏁⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫
+⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫🛑⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫
+⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫🔵⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫
+⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫🐒️⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫🌟⚫⚫⚫⚫⚫⚫⚫⚫
+⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫💫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫🌟⚫⚫⚫⚫⚫⚫⚫⚫
+⚫⚫⚫🌟🌟🌟🌟🌟🛑🟠🏁🛑🔵🐒️💫⭐💫🐒️🔵🛑🏁🟠🌟🌟🌟🌟🌟🌟⚫🟠⚫⚫⚫⚫⚫⚫⚫⚫
+⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫🌮️⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫🌮️⚫⚫⚫⚫⚫⚫⚫⚫
+⚫⚫⚫⚫⚫🛑⚫⚫⚫⚫⚫⚫⚫⚫💫⚫💫⚫⚫⚫⚫🛑📝🔵🏁🟠🌮️🌮️💫⭐🌮️🌮️🌮️🌮️🟠🌟🌟🌟
+⚫⚫⚫⚫⚫🟠⚫⚫⚫⚫⚫⚫⚫🐒️⚫⚫⚫🐒️⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫🐠⚫⚫⚫⚫⚫⚫⚫⚫
+⚫🌟🌟🌟🌟⭐🔵🛑🌟🌟⚫⚫🔵⚫⚫⚫⚫⚫🔵⚫⚫⚫⚫⚫⚫⚫⚫⚫🐒️⚫🌮️⚫⚫⚫⚫⚫⚫⚫
+⚫⚫⚫⚫⚫🐒️⚫⚫⚫⚫⚫🛑⚫⚫⚫⚫⚫⚫⚫🛑⚫⚫⚫⚫⚫⚫⚫🟠⚫⚫⚫🟠⚫⚫⚫⚫⚫⚫
+⚫⚫⚫⚫🌟⚫🌟⚫⚫⚫🏁⚫⚫⚫⚫⚫⚫⚫⚫⚫🏁⚫⚫⚫⚫⚫🌟⚫⚫⚫⚫⚫🌟⚫⚫⚫⚫⚫
+⚫⚫⚫🌟⚫⚫⚫🌟⚫🟠⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫🟠⚫⚫⚫🌟⚫⚫⚫⚫⚫⚫⚫🌟⚫⚫⚫⚫
+```
+
+So, so beautiful I feel like the double rainbow guys. (RIP, you amazing human being).
+
+> [!note] One thing to consider is that this conversion process only converts letters and a couple other characters into beautiful emojis. So if you run out of identifiers, make sure to use a double width character, and emoji or something else, otherwise your code might look ugly. 
+
+You can save the content to a file and run it
+
+```shell
+bin/starlang convert -d beautiful smarter_surprise.sea > beatiful_smarter_surprise.sea
+bin/starlang run beatiful_smarter_surprise.sea
+
+!
+```
+
+> [!note] You might have to press enter after trying to run it, because the interpreter is waiting for input. Here it doesn't matter, so just press enter, or just type your name and watch the interpreter ignore you.
+
+You can also just run the alternative syntax directly, but you suck if you do so. Remember, allways run the beautiful code!
+
+```shell
+bin/starlang alt smarter_surprise.sea 
+
+!
+```

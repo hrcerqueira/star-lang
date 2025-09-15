@@ -12,6 +12,9 @@ class SamplesTest extends AnyFunSuite:
   test("print a surprise"):
     runAndAssert("surprise", "!")
 
+  test("print a smarter surprise"):
+    runAndAssert("smarter_surprise", "!")
+
   test("print a"):
     runAndAssert("printa", "a")
 
